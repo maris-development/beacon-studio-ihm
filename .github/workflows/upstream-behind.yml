@@ -1,0 +1,58 @@
+name: Upstream behind check
+
+on:
+    schedule:
+        - cron: "0 6 * * 1"
+    workflow_dispatch:
+
+permissions:
+    contents: read
+    issues: write
+
+env:
+    UPSTREAM_URL: https://github.com/maris-development/beacon-studio.git
+    UPSTREAM_BRANCH: main
+    LABEL: upstream-sync
+
+jobs:
+    check:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Count commits behind upstream
+              id: count
+              run: |
+                  git remote add upstream "$UPSTREAM_URL"
+                  git fetch --no-tags upstream "$UPSTREAM_BRANCH"
+                  echo "behind=$(git rev-list --count HEAD..upstream/$UPSTREAM_BRANCH)" >> "$GITHUB_OUTPUT"
+
+            - name: Open or update the sync issue
+              env:
+                  GH_TOKEN: ${{ github.token }}
+                  BEHIND: ${{ steps.count.outputs.behind }}
+              run: |
+                  repo="$GITHUB_REPOSITORY"
+                  issue=$(gh issue list --repo "$repo" --label "$LABEL" --state open --json number --jq '.[0].number // empty')
+
+                  if [ "$BEHIND" = "0" ]; then
+                      echo "B is up to date with upstream."
+                      if [ -n "$issue" ]; then
+                          gh issue close "$issue" --repo "$repo" --comment "B is up to date with upstream."
+                      fi
+                      exit 0
+                  fi
+
+                  # The label must exist before an issue can use it.
+                  gh label create "$LABEL" --repo "$repo" --color FBCA04 --description "B is behind upstream" 2>/dev/null || true
+
+                  guide="$GITHUB_SERVER_URL/$repo/blob/$GITHUB_REF_NAME/UPSTREAM.md"
+                  body="B is $BEHIND commits behind \`$UPSTREAM_BRANCH\` of $UPSTREAM_URL. Follow section 3 of [UPSTREAM.md]($guide) to sync."
+
+                  if [ -n "$issue" ]; then
+                      gh issue edit "$issue" --repo "$repo" --body "$body"
+                  else
+                      gh issue create --repo "$repo" --title "Sync with upstream" --label "$LABEL" --body "$body"
+                  fi
