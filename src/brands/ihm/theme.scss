@@ -1,2 +1,147 @@
 // Brand tokens: override `:root` and `:root.dark` tokens of src/tailwind.css. See README.md.
 // Put only `:root` tokens, `:root.dark` tokens and `@font-face` rules in this file.
+
+// Source Sans 3 (OFL-1.1, fonts.gstatic.com v20) stands in where RO Sans is not installed.
+@font-face {
+    font-family: "Source Sans 3";
+    font-style: normal;
+    font-weight: 200 900;
+    font-display: swap;
+    src: url("./fonts/source-sans-3-latin.woff2") format("woff2");
+    unicode-range:
+        U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+        U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: "Source Sans 3";
+    font-style: normal;
+    font-weight: 200 900;
+    font-display: swap;
+    src: url("./fonts/source-sans-3-latin-ext.woff2") format("woff2");
+    unicode-range:
+        U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+        U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113,
+        U+2C60-2C7F, U+A720-A7FF;
+}
+
+:root {
+    --font-family-base: "RO Sans", "Source Sans 3", Calibri, "Segoe UI", Arial, sans-serif;
+
+    --primary: #01689b;
+    --primary-foreground: #ffffff;
+    --highlight: #007bc7;
+    --app-background: #f3f3f3;
+    --foreground: #262626;
+    --card-border: #dadde1;
+    --sidebar-border: #dadde1;
+    --muted: #f3f3f3;
+    --muted-foreground: #5c6670;
+    --secondary: #eef1f4;
+    --accent: #eef1f4;
+    --input-border: #b8bec5;
+    --selected-background: #eef7fb;
+    --heading-foreground: #154273;
+    --link: #01689b;
+    --control-active: #01689b;
+    --map-draw: #01689b;
+    --focus-ring: #ffb612;
+    --notice-info-background: #eef7fb;
+    --notice-info-foreground: #154273;
+
+    // The Rijkshuisstijl uses near square corners.
+    --radius: 4px;
+    --button-radius: 3px;
+    --button-shadow: none;
+    --card-radius: 4px;
+    --input-radius: 3px;
+    --menu-item-radius: 3px;
+
+    // The white logo needs the light blue band. Lintblauw text keeps WCAG AA contrast on it.
+    --sidebar-header-background: #8fcae7;
+    --page-header-background: #8fcae7;
+    --sidebar-header-foreground: #154273;
+    --sidebar-header-hover: rgb(255 255 255 / 0.2);
+    --sidebar-logo-height: 2.5rem;
+    --page-header-logo-height: 1.75rem;
+    --sidebar-name-white-space: normal;
+    --sidebar-name-divider: 1px solid rgb(21 66 115 / 0.35);
+    --sidebar-name-indent: 0.75rem;
+
+    // Pixel stops keep the text on lintblauw. The extra width keeps the logo circle of the banner in the dark zone.
+    --home-header-background:
+        linear-gradient(
+            90deg,
+            rgb(21 66 115) 0,
+            rgb(21 66 115 / 0.97) 600px,
+            rgb(21 66 115 / 0.62) 740px,
+            rgb(21 66 115 / 0.16) 920px,
+            rgb(21 66 115 / 0) 1060px
+        ),
+        url("./assets/banner.jpg") right center / calc(100% + 400px) auto no-repeat, #154273;
+    --home-header-padding: 2rem 2.25rem 1.75rem;
+    --home-header-margin: 0 0 3rem;
+    --home-header-radius: 4px;
+    --home-title-foreground: #ffffff;
+    --home-title-highlight: #8fcae7;
+    --home-subtitle-foreground: rgb(255 255 255 / 0.88);
+
+    // The banner replaces the network background of the home page.
+    --network-line: transparent;
+    --network-dot: transparent;
+    --network-glow-a: transparent;
+    --network-glow-b: transparent;
+}
+
+// The header and home tokens are not set here, so the band and the banner stay in dark mode.
+:root.dark {
+    --app-background: #07121d;
+    --background: #0e1b29;
+    --card: #0e1b29;
+    --popover: #0e1b29;
+    --sidebar: #0e1b29;
+    --crumb-background: #0e1b29;
+
+    --foreground: #dce5ee;
+    --card-foreground: #dce5ee;
+    --popover-foreground: #dce5ee;
+    --sidebar-foreground: #dce5ee;
+    --heading-foreground: #e9f3fa;
+
+    --card-border: rgb(143 202 231 / 0.15);
+    --border: rgb(143 202 231 / 0.15);
+    --sidebar-border: rgb(143 202 231 / 0.15);
+    --table-border: rgb(143 202 231 / 0.15);
+    --crumb-border: rgb(143 202 231 / 0.15);
+
+    --muted: #122334;
+    --muted-foreground: #9aaebf;
+    --secondary: #172a3c;
+    --accent: #172a3c;
+    --sidebar-accent: #172a3c;
+    --table-row-hover: #172a3c;
+    --table-header-background: #122334;
+
+    --primary: #8fcae7;
+    --primary-foreground: #07121d;
+    --highlight: #8fcae7;
+    --link: #8fcae7;
+    --control-active: #8fcae7;
+    --control-active-foreground: #07121d;
+    --sidebar-primary: #8fcae7;
+    --sidebar-accent-foreground: #8fcae7;
+    --sidebar-ring: #8fcae7;
+
+    --input: rgb(255 255 255 / 0.2);
+    --input-border: rgb(255 255 255 / 0.2);
+    --selected-background: rgb(143 202 231 / 0.08);
+    --focus-ring: #ffb612;
+
+    --notice-info-background: color-mix(in srgb, #8fcae7 15%, #0e1b29);
+    --notice-info-foreground: #8fcae7;
+
+    --network-line: transparent;
+    --network-dot: transparent;
+    --network-glow-a: transparent;
+    --network-glow-b: transparent;
+}
